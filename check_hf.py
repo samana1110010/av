@@ -1,8 +1,9 @@
-from datasets import load_dataset
-ds = load_dataset("11hu83/vggsound", split="train")
-print("Total rows:", len(ds))
 import pandas as pd
-df = ds.to_pandas()
+
+# Use the metadata downloaded with the project. Importing Hugging Face's
+# `datasets` package here collides with this project's local `datasets` package.
+df = pd.read_csv("data/metadata.csv")
+print("Total rows:", len(df))
 classes = [
     'basketball bounce', 'car passing by', 'raining', 'typing on computer keyboard',
     'ripping paper', 'dog barking', 'fire crackling', 'footsteps on snow',

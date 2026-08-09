@@ -6,11 +6,11 @@ from torchvision.models import resnet18, ResNet18_Weights
 
 class AudioEncoder(nn.Module):
 
-    def __init__(self, embedding_dim=128):
+    def __init__(self, embedding_dim=128, weights=ResNet18_Weights.IMAGENET1K_V1):
         super().__init__()
 
         # Pretrained ResNet18
-        backbone = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
+        backbone = resnet18(weights=weights)
         
         # Remove classifier and avgpool (we will use adaptive pool or flatten after the backbone)
         self.backbone = nn.Sequential(*list(backbone.children())[:-1])
@@ -36,6 +36,12 @@ class AudioEncoder(nn.Module):
         Output:
             (B, embedding_dim)
         """
+
+        if x.ndim != 4 or x.shape[1] != 1:
+            raise ValueError(
+                "Expected mel spectrograms with shape (batch, 1, bins, time), "
+                f"got {tuple(x.shape)}"
+            )
 
         # Convert 1-channel Mel to 3-channel for ResNet
         x = x.repeat(1, 3, 1, 1)

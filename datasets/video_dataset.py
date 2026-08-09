@@ -50,6 +50,11 @@ class VideoDataset(Dataset):
 
         images = sorted(folder.glob("*.jpg"))
 
+        if not images:
+            raise FileNotFoundError(
+                f"No JPEG frames found for video {video_id!r} in {folder}"
+            )
+
         frames = []
 
         for img in images:
@@ -66,4 +71,4 @@ class VideoDataset(Dataset):
 
         frames = torch.stack(frames)
 
-        return frames, torch.tensor(label), video_id
+        return frames, torch.tensor(label, dtype=torch.long), video_id

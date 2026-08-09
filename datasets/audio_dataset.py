@@ -2,11 +2,14 @@ import torch
 import torchaudio
 import pandas as pd
 
+from datasets.audio_io import load_audio
 from pathlib import Path
 from torch.utils.data import Dataset
 
 
 class AudioDataset(Dataset):
+
+    TARGET_TIME = 800
 
     def __init__(self, csv_file, audio_dir):
         self.data = pd.read_csv(csv_file)
@@ -28,7 +31,12 @@ class AudioDataset(Dataset):
 
         audio_path = self.audio_dir / f"{video_id}.wav"
 
-        waveform, sample_rate = torchaudio.load(audio_path)
+        if not audio_path.is_file():
+            raise FileNotFoundError(
+                f"Audio file not found for video {video_id!r}: {audio_path}"
+            )
+
+        waveform, sample_rate = load_audio(audio_path)
 
         # Convert to mono
         if waveform.shape[0] > 1:
@@ -43,5 +51,12 @@ class AudioDataset(Dataset):
             waveform = resampler(waveform)
 
         mel = self.mel_transform(waveform)
+
+        if mel.shape[-1] > self.TARGET_TIME:
+            mel = mel[..., :self.TARGET_TIME]
+        elif mel.shape[-1] < self.TARGET_TIME:
+            mel = torch.nn.functional.pad(
+                mel, (0, self.TARGET_TIME - mel.shape[-1])
+            )
 
         return mel, torch.tensor(label, dtype=torch.long)

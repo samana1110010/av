@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Load embeddings
 # -------------------------
 
-video_embeddings = np.load("embeddings/video_embeddings.npy")
+video_embeddings = np.load("data/video_embeddings.npy")
 audio_embeddings = np.load("embeddings/audio_embeddings.npy")
 
 print("Video embeddings:", video_embeddings.shape)

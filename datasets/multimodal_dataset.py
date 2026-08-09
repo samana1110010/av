@@ -8,6 +8,8 @@ from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+from datasets.audio_io import load_audio
+
 
 class MultimodalDataset(Dataset):
 
@@ -61,6 +63,11 @@ class MultimodalDataset(Dataset):
 
         images = sorted(frame_folder.glob("*.jpg"))
 
+        if not images:
+            raise FileNotFoundError(
+                f"No JPEG frames found for video {video_id!r} in {frame_folder}"
+            )
+
         frames = []
 
         for image_path in images:
@@ -86,7 +93,12 @@ class MultimodalDataset(Dataset):
 
         audio_path = self.audio_dir / f"{video_id}.wav"
 
-        waveform, sample_rate = torchaudio.load(audio_path)
+        if not audio_path.is_file():
+            raise FileNotFoundError(
+                f"Audio file not found for video {video_id!r}: {audio_path}"
+            )
+
+        waveform, sample_rate = load_audio(audio_path)
 
         # Convert stereo -> mono
         if waveform.shape[0] > 1:

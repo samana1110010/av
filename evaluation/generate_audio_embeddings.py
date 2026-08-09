@@ -7,6 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 
 from models.audio_encoder import AudioEncoder
+from datasets.audio_io import load_audio
 
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -41,7 +42,7 @@ class AudioGalleryDataset(Dataset):
             f"{video_id}.wav"
         )
 
-        waveform, sample_rate = torchaudio.load(audio_path)
+        waveform, sample_rate = load_audio(audio_path)
 
         # Stereo -> mono
         if waveform.shape[0] > 1:

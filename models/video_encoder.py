@@ -5,7 +5,7 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 class VideoEncoder(nn.Module):
 
-    def __init__(self, embedding_dim=128):
+    def __init__(self, embedding_dim=128, weights=ResNet50_Weights.IMAGENET1K_V2):
 
         super().__init__()
 
@@ -13,9 +13,7 @@ class VideoEncoder(nn.Module):
         # Pretrained ResNet50
         # --------------------------
 
-        backbone = resnet50(
-            weights=ResNet50_Weights.IMAGENET1K_V2
-        )
+        backbone = resnet50(weights=weights)
 
         # Remove classifier
         self.backbone = nn.Sequential(
@@ -47,10 +45,16 @@ class VideoEncoder(nn.Module):
             (B, 128)
         """
 
+        if frames.ndim != 5:
+            raise ValueError(
+                "Expected frames with shape (batch, time, channels, height, width), "
+                f"got {tuple(frames.shape)}"
+            )
+
         B, T, C, H, W = frames.shape
 
         # Merge batch and time
-        frames = frames.view(B * T, C, H, W)
+        frames = frames.reshape(B * T, C, H, W)
 
         # Extract frame features
         features = self.backbone(frames)
@@ -59,7 +63,7 @@ class VideoEncoder(nn.Module):
         features = features.squeeze(-1).squeeze(-1)
 
         # (B*T, 2048)
-        features = features.view(B, T, 2048)
+        features = features.reshape(B, T, 2048)
 
         # Temporal mean pooling
         video_features = features.mean(dim=1)
