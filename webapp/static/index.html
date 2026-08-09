@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SyncSense | Cross-Modal Retrieval</title>
+    <title>SyncSense | Video Event Classification Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -17,13 +17,12 @@
         <header>
             <div class="logo">
                 <h1>Sync<span class="neon-cyan">Sense</span></h1>
-                <p>Cross-Modal Audio-Video Retrieval</p>
+                <p>Supervised Video Event Classification Comparison</p>
             </div>
             <nav>
-                <a href="#" class="active">Home</a>
-                <a href="#">Upload</a>
-                <a href="#">My Library</a>
-                <a href="#">History</a>
+                <a href="#" class="active">Classifier Demo</a>
+                <a href="#">Metrics</a>
+                <a href="#">Architecture</a>
             </nav>
             <div class="user-profile">
                 <div class="avatar">SJ</div>
@@ -33,50 +32,25 @@
 
         <main>
             <section class="upload-section glass-panel">
-                <h2>Upload or Search: Audio/Video Query</h2>
-                <div class="upload-zones">
-                    <div class="upload-box" id="video-upload">
-                        <div class="upload-header">
-                            <span>VIDEO QUERY</span>
-                            <div class="icons">
-                                <span>▶</span>
-                            </div>
-                        </div>
-                        <div class="drop-zone video-zone">
-                            <div class="upload-icon">↑</div>
-                            <p>Drag & Drop Video or<br>Click to Upload (MP4, AVI)</p>
-                            <input type="file" accept="video/*" class="file-input" data-type="video">
-                        </div>
-                    </div>
-
-                    <div class="or-divider">
-                        <hr>
-                        <span>OR</span>
-                        <hr>
-                    </div>
-
-                    <div class="upload-box" id="audio-upload">
-                        <div class="upload-header">
-                            <span>AUDIO QUERY</span>
-                            <div class="icons">
-                                <span>♪</span>
-                            </div>
-                        </div>
-                        <div class="drop-zone audio-zone">
-                            <div class="upload-icon">↑</div>
-                            <p>Drag & Drop Audio or<br>Click to Upload (MP3, WAV)</p>
-                            <input type="file" accept="audio/*" class="file-input" data-type="audio">
-                        </div>
-                    </div>
+                <h2>Multimodal Video Event Classification</h2>
+                <p style="color: #a0aec0; margin-bottom: 20px;">
+                    Upload an MP4 video file from your computer to run predictions across all three frozen classifiers.
+                </p>
+                <div class="controls" style="display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                    <label for="video-input" class="neon-btn" style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                        📁 Choose MP4 File
+                        <input type="file" id="video-input" accept="video/mp4,video/*" style="display: none;">
+                    </label>
+                    <span id="file-name-display" style="color: var(--neon-cyan); font-size: 0.9rem; font-weight: 500;">No file selected</span>
+                    <button id="upload-btn" class="neon-btn" style="border-color: #00ff88; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);" disabled>Upload & Classify MP4</button>
+                    <button id="classify-btn" class="neon-btn secondary-btn" style="opacity: 0.7; font-size: 0.85rem;">Classify Sample Test Video</button>
                 </div>
-                <button id="start-btn" class="neon-btn" disabled>Start Retrieval</button>
             </section>
 
             <section class="results-section">
-                <h2>Retrieval Results <span id="query-info"></span></h2>
+                <h2>Model Predictions <span id="query-info"></span></h2>
                 <div class="results-grid" id="results-container">
-                    <!-- Results will be injected here via JS -->
-                    <div class="placeholder-text">Upload a query to see results...</div>
+                    <div class="placeholder-text">Select an MP4 file and click 'Upload & Classify MP4' to run inference across all 3 models...</div>
                 </div>
             </section>
         </main>

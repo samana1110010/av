@@ -1,0 +1,51 @@
+video_id,class_name,label,frame_folder
+Xjm0rC42qxo_000250,basketball bounce,0,data/unseen_test/frames/Xjm0rC42qxo_000250
+jcCKnsWsnuY_000161,basketball bounce,0,data/unseen_test/frames/jcCKnsWsnuY_000161
+f2gyMOdUSDY_000010,basketball bounce,0,data/unseen_test/frames/f2gyMOdUSDY_000010
+Q4Axv0YZGcQ_000077,basketball bounce,0,data/unseen_test/frames/Q4Axv0YZGcQ_000077
+fzLG4DQ9mLQ_000510,basketball bounce,0,data/unseen_test/frames/fzLG4DQ9mLQ_000510
+LqB9SQFGCSs_000030,car passing by,1,data/unseen_test/frames/LqB9SQFGCSs_000030
+0jfI9LI9kUM_000030,car passing by,1,data/unseen_test/frames/0jfI9LI9kUM_000030
+10khlGmxNsE_000030,car passing by,1,data/unseen_test/frames/10khlGmxNsE_000030
+qWjMND9ZSS4_000048,car passing by,1,data/unseen_test/frames/qWjMND9ZSS4_000048
+334u5Ja0iho_000033,car passing by,1,data/unseen_test/frames/334u5Ja0iho_000033
+HR9eRE54Id0_000010,raining,7,data/unseen_test/frames/HR9eRE54Id0_000010
+ajDBYcZXQy8_000090,raining,7,data/unseen_test/frames/ajDBYcZXQy8_000090
+LyzZKJmVHnE_000030,raining,7,data/unseen_test/frames/LyzZKJmVHnE_000030
+x8nsHIQXA8w_000020,raining,7,data/unseen_test/frames/x8nsHIQXA8w_000020
+zFdRXOYY6SE_000030,raining,7,data/unseen_test/frames/zFdRXOYY6SE_000030
+DdeAOHSE98o_000040,typing on computer keyboard,9,data/unseen_test/frames/DdeAOHSE98o_000040
+oTERiCZpEX8_000020,typing on computer keyboard,9,data/unseen_test/frames/oTERiCZpEX8_000020
+ShJltlTvg5o_000030,typing on computer keyboard,9,data/unseen_test/frames/ShJltlTvg5o_000030
+7wODqThG8rg_000020,typing on computer keyboard,9,data/unseen_test/frames/7wODqThG8rg_000020
+W-NXVXk1g6c_000030,typing on computer keyboard,9,data/unseen_test/frames/W-NXVXk1g6c_000030
+r1EA40TXEBI_000375,ripping paper,8,data/unseen_test/frames/r1EA40TXEBI_000375
+7Qcl_tGVVuM_000361,ripping paper,8,data/unseen_test/frames/7Qcl_tGVVuM_000361
+eXT8Drl2aBE_000819,ripping paper,8,data/unseen_test/frames/eXT8Drl2aBE_000819
+ybvvgjjzFPc_000456,ripping paper,8,data/unseen_test/frames/ybvvgjjzFPc_000456
+gP_Gefiv-4Q_000663,ripping paper,8,data/unseen_test/frames/gP_Gefiv-4Q_000663
+898NtBwYP1U_000060,dog barking,2,data/unseen_test/frames/898NtBwYP1U_000060
+RGK2m-KvHBM_000090,dog barking,2,data/unseen_test/frames/RGK2m-KvHBM_000090
+qg-5-olFt6w_000060,dog barking,2,data/unseen_test/frames/qg-5-olFt6w_000060
+hh_DVVgHYzI_000070,dog barking,2,data/unseen_test/frames/hh_DVVgHYzI_000070
+iTPVDE5y8XQ_000040,dog barking,2,data/unseen_test/frames/iTPVDE5y8XQ_000040
+TvMEv-Sx88I_000506,fire crackling,4,data/unseen_test/frames/TvMEv-Sx88I_000506
+8jhFizKS_GM_000017,fire crackling,4,data/unseen_test/frames/8jhFizKS_GM_000017
+kH6FojOwSQw_000114,fire crackling,4,data/unseen_test/frames/kH6FojOwSQw_000114
+8sIrvl2ai7o_000038,fire crackling,4,data/unseen_test/frames/8sIrvl2ai7o_000038
+xKu9WP7iris_000018,fire crackling,4,data/unseen_test/frames/xKu9WP7iris_000018
+Ul0-TOsrYwE_000048,footsteps on snow,5,data/unseen_test/frames/Ul0-TOsrYwE_000048
+63eR-FvIwbo_000011,footsteps on snow,5,data/unseen_test/frames/63eR-FvIwbo_000011
+nBuYyOeQkZo_000014,footsteps on snow,5,data/unseen_test/frames/nBuYyOeQkZo_000014
+bIx9uXicCsI_000116,footsteps on snow,5,data/unseen_test/frames/bIx9uXicCsI_000116
+ZTz6u5VPZr0_000681,footsteps on snow,5,data/unseen_test/frames/ZTz6u5VPZr0_000681
+L_8C2RXTSds_000172,door slamming,3,data/unseen_test/frames/L_8C2RXTSds_000172
+5XIPNgbnj50_000007,door slamming,3,data/unseen_test/frames/5XIPNgbnj50_000007
+mHt1q-jIdA0_000030,door slamming,3,data/unseen_test/frames/mHt1q-jIdA0_000030
+Nu_vu3eXRV0_000137,door slamming,3,data/unseen_test/frames/Nu_vu3eXRV0_000137
+MXmetP4F-EU_000029,door slamming,3,data/unseen_test/frames/MXmetP4F-EU_000029
+OqTSAIwQ_Ck_000124,hammering nails,6,data/unseen_test/frames/OqTSAIwQ_Ck_000124
+QQWjA7u9LzM_000246,hammering nails,6,data/unseen_test/frames/QQWjA7u9LzM_000246
+4ZJOjbOmRzY_000172,hammering nails,6,data/unseen_test/frames/4ZJOjbOmRzY_000172
+yk7Jj223Q3M_000051,hammering nails,6,data/unseen_test/frames/yk7Jj223Q3M_000051
+u3NCFO-m6EQ_000433,hammering nails,6,data/unseen_test/frames/u3NCFO-m6EQ_000433

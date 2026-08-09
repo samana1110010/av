@@ -28,13 +28,13 @@ class AudioEncoder(nn.Module):
             nn.Linear(256, embedding_dim)
         )
 
-    def forward(self, x):
+    def forward(self, x, return_features=False):
         """
         Input:
             (B, 1, 128, T)
 
         Output:
-            (B, embedding_dim)
+            (B, embedding_dim) or (B, 512) if return_features is True
         """
 
         if x.ndim != 4 or x.shape[1] != 1:
@@ -47,6 +47,10 @@ class AudioEncoder(nn.Module):
         x = x.repeat(1, 3, 1, 1)
 
         x = self.backbone(x)
+
+        if return_features:
+            return x.flatten(1)
+
         x = self.projector(x)
 
         x = F.normalize(x, p=2, dim=1)

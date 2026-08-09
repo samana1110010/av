@@ -1,0 +1,51 @@
+video_id,ground_truth_label,ground_truth_class,video_pred_class,video_pred_conf,video_correct,audio_pred_class,audio_pred_conf,audio_correct,fusion_pred_class,fusion_pred_conf,fusion_correct
+Xjm0rC42qxo_000250,0,basketball bounce,basketball bounce,25.43,True,raining,25.58,False,car passing by,33.5,False
+jcCKnsWsnuY_000161,0,basketball bounce,basketball bounce,71.38,True,raining,27.61,False,basketball bounce,92.25,True
+f2gyMOdUSDY_000010,0,basketball bounce,basketball bounce,39.34,True,car passing by,27.59,False,basketball bounce,53.47,True
+Q4Axv0YZGcQ_000077,0,basketball bounce,door slamming,30.52,False,basketball bounce,38.19,True,door slamming,43.63,False
+fzLG4DQ9mLQ_000510,0,basketball bounce,basketball bounce,76.21,True,basketball bounce,22.43,True,basketball bounce,92.82,True
+LqB9SQFGCSs_000030,1,car passing by,car passing by,52.77,True,car passing by,38.17,True,car passing by,85.69,True
+0jfI9LI9kUM_000030,1,car passing by,raining,42.75,False,fire crackling,20.22,False,raining,28.14,False
+10khlGmxNsE_000030,1,car passing by,raining,20.94,False,car passing by,27.58,True,door slamming,39.81,False
+qWjMND9ZSS4_000048,1,car passing by,car passing by,42.52,True,car passing by,48.06,True,car passing by,87.89,True
+334u5Ja0iho_000033,1,car passing by,car passing by,20.42,True,car passing by,44.43,True,car passing by,63.64,True
+HR9eRE54Id0_000010,7,raining,dog barking,21.29,False,raining,28.62,True,raining,18.64,True
+ajDBYcZXQy8_000090,7,raining,dog barking,21.46,False,raining,49.88,True,raining,25.97,True
+LyzZKJmVHnE_000030,7,raining,raining,21.5,True,basketball bounce,23.64,False,raining,22.84,True
+x8nsHIQXA8w_000020,7,raining,raining,20.04,True,raining,48.65,True,raining,55.36,True
+zFdRXOYY6SE_000030,7,raining,raining,17.51,True,raining,30.14,True,raining,30.92,True
+DdeAOHSE98o_000040,9,typing on computer keyboard,typing on computer keyboard,35.63,True,fire crackling,19.6,False,typing on computer keyboard,62.01,True
+oTERiCZpEX8_000020,9,typing on computer keyboard,typing on computer keyboard,39.85,True,typing on computer keyboard,47.27,True,typing on computer keyboard,97.81,True
+ShJltlTvg5o_000030,9,typing on computer keyboard,typing on computer keyboard,35.08,True,typing on computer keyboard,29.42,True,typing on computer keyboard,89.9,True
+7wODqThG8rg_000020,9,typing on computer keyboard,typing on computer keyboard,24.46,True,ripping paper,40.68,False,typing on computer keyboard,90.05,True
+W-NXVXk1g6c_000030,9,typing on computer keyboard,typing on computer keyboard,46.52,True,ripping paper,34.78,False,typing on computer keyboard,67.3,True
+r1EA40TXEBI_000375,8,ripping paper,ripping paper,41.86,True,footsteps on snow,35.15,False,ripping paper,85.06,True
+7Qcl_tGVVuM_000361,8,ripping paper,ripping paper,34.31,True,ripping paper,41.06,True,ripping paper,73.06,True
+eXT8Drl2aBE_000819,8,ripping paper,door slamming,16.82,False,footsteps on snow,27.46,False,ripping paper,34.56,True
+ybvvgjjzFPc_000456,8,ripping paper,ripping paper,24.54,True,typing on computer keyboard,22.59,False,ripping paper,32.26,True
+gP_Gefiv-4Q_000663,8,ripping paper,ripping paper,37.35,True,raining,24.42,False,ripping paper,53.03,True
+898NtBwYP1U_000060,2,dog barking,dog barking,63.63,True,dog barking,46.45,True,dog barking,94.81,True
+RGK2m-KvHBM_000090,2,dog barking,dog barking,48.94,True,dog barking,46.01,True,dog barking,92.25,True
+qg-5-olFt6w_000060,2,dog barking,dog barking,56.91,True,dog barking,49.59,True,dog barking,93.84,True
+hh_DVVgHYzI_000070,2,dog barking,dog barking,68.99,True,dog barking,33.95,True,dog barking,95.25,True
+iTPVDE5y8XQ_000040,2,dog barking,dog barking,37.78,True,ripping paper,23.57,False,dog barking,61.12,True
+TvMEv-Sx88I_000506,4,fire crackling,raining,24.65,False,typing on computer keyboard,40.96,False,fire crackling,41.26,True
+8jhFizKS_GM_000017,4,fire crackling,raining,49.21,False,dog barking,17.73,False,door slamming,28.64,False
+kH6FojOwSQw_000114,4,fire crackling,raining,21.41,False,footsteps on snow,41.13,False,fire crackling,39.89,True
+8sIrvl2ai7o_000038,4,fire crackling,raining,22.37,False,footsteps on snow,20.51,False,fire crackling,40.16,True
+xKu9WP7iris_000018,4,fire crackling,raining,26.59,False,footsteps on snow,26.72,False,fire crackling,30.03,True
+Ul0-TOsrYwE_000048,5,footsteps on snow,footsteps on snow,59.63,True,footsteps on snow,24.77,True,footsteps on snow,88.13,True
+63eR-FvIwbo_000011,5,footsteps on snow,footsteps on snow,21.38,True,footsteps on snow,36.23,True,footsteps on snow,58.64,True
+nBuYyOeQkZo_000014,5,footsteps on snow,footsteps on snow,21.76,True,footsteps on snow,28.49,True,footsteps on snow,50.66,True
+bIx9uXicCsI_000116,5,footsteps on snow,footsteps on snow,41.14,True,footsteps on snow,58.9,True,footsteps on snow,89.92,True
+ZTz6u5VPZr0_000681,5,footsteps on snow,footsteps on snow,37.1,True,typing on computer keyboard,37.5,False,footsteps on snow,50.17,True
+L_8C2RXTSds_000172,3,door slamming,hammering nails,14.34,False,raining,23.78,False,door slamming,25.12,True
+5XIPNgbnj50_000007,3,door slamming,basketball bounce,35.2,False,basketball bounce,20.71,False,door slamming,54.89,True
+mHt1q-jIdA0_000030,3,door slamming,car passing by,37.47,False,typing on computer keyboard,27.18,False,fire crackling,37.34,False
+Nu_vu3eXRV0_000137,3,door slamming,door slamming,26.58,True,dog barking,24.48,False,door slamming,47.39,True
+MXmetP4F-EU_000029,3,door slamming,door slamming,21.16,True,fire crackling,18.02,False,door slamming,47.4,True
+OqTSAIwQ_Ck_000124,6,hammering nails,hammering nails,25.0,True,ripping paper,20.8,False,hammering nails,43.4,True
+QQWjA7u9LzM_000246,6,hammering nails,hammering nails,48.43,True,hammering nails,52.03,True,hammering nails,93.36,True
+4ZJOjbOmRzY_000172,6,hammering nails,ripping paper,32.71,False,hammering nails,35.4,True,hammering nails,37.4,True
+yk7Jj223Q3M_000051,6,hammering nails,hammering nails,20.57,True,dog barking,21.86,False,hammering nails,28.98,True
+u3NCFO-m6EQ_000433,6,hammering nails,hammering nails,24.56,True,hammering nails,23.38,True,hammering nails,46.76,True

@@ -35,14 +35,14 @@ class VideoEncoder(nn.Module):
             nn.Linear(256, embedding_dim)
         )
 
-    def forward(self, frames):
+    def forward(self, frames, return_features=False):
 
         """
         Input:
             (B, 8, 3, 224, 224)
 
         Output:
-            (B, 128)
+            (B, 128) or (B, 2048) if return_features is True
         """
 
         if frames.ndim != 5:
@@ -67,6 +67,9 @@ class VideoEncoder(nn.Module):
 
         # Temporal mean pooling
         video_features = features.mean(dim=1)
+
+        if return_features:
+            return video_features
 
         # Projection
         embedding = self.projector(video_features)
