@@ -2,10 +2,10 @@ import faiss
 import numpy as np
 
 # -----------------------
-# Load embeddings
+# Load audio embeddings
 # -----------------------
 
-embeddings = np.load("data/video_embeddings.npy")
+embeddings = np.load("embeddings/audio_embeddings.npy")
 
 print("Loaded embeddings:", embeddings.shape)
 
@@ -15,7 +15,8 @@ print("Loaded embeddings:", embeddings.shape)
 
 dimension = embeddings.shape[1]
 
-index = faiss.IndexFlatL2(dimension)
+# Embeddings are L2-normalized
+index = faiss.IndexFlatIP(dimension)
 
 index.add(embeddings)
 
@@ -25,6 +26,6 @@ print("Indexed vectors:", index.ntotal)
 # Save index
 # -----------------------
 
-faiss.write_index(index, "data/video.index")
+faiss.write_index(index, "embeddings/audio.index")
 
 print("Index saved!")

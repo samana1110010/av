@@ -2,27 +2,30 @@ import faiss
 import numpy as np
 
 # -----------------------
-# Load index
+# Load FAISS audio index
 # -----------------------
 
-index = faiss.read_index("data/video.index")
+index = faiss.read_index("embeddings/audio.index")
 
 # -----------------------
 # Load embeddings and IDs
 # -----------------------
 
-embeddings = np.load("data/video_embeddings.npy")
+video_embeddings = np.load("data/video_embeddings.npy")
 video_ids = np.load("data/video_ids.npy")
 
-print("Loaded", len(video_ids), "videos")
+audio_ids = np.load("embeddings/audio_ids.npy")
+
+print("Loaded", len(video_ids), "video embeddings")
+print("Loaded", len(audio_ids), "audio embeddings")
 
 # -----------------------
-# Choose a query
+# Choose a query video
 # -----------------------
 
 query_index = 0
 
-query_embedding = embeddings[query_index].reshape(1, -1)
+query_embedding = video_embeddings[query_index].reshape(1, -1)
 
 # -----------------------
 # Search
@@ -30,15 +33,17 @@ query_embedding = embeddings[query_index].reshape(1, -1)
 
 k = 5
 
-distances, indices = index.search(query_embedding, k)
+scores, indices = index.search(query_embedding, k)
 
-print("\nQuery Video:")
+print("\n===================================")
+print("Query Video:")
 print(video_ids[query_index])
+print("===================================\n")
 
-print("\nTop", k, "Nearest Videos:\n")
+print(f"Top {k} Retrieved Audio Clips:\n")
 
 for rank, idx in enumerate(indices[0], start=1):
     print(
-        f"{rank}. {video_ids[idx]} "
-        f"(distance={distances[0][rank-1]:.4f})"
+        f"{rank}. {audio_ids[idx]} "
+        f"(similarity={scores[0][rank-1]:.4f})"
     )

@@ -30,6 +30,15 @@ loader = DataLoader(
 # -----------------------------
 
 model = VideoEncoder().to(device)
+
+# Load trained checkpoint
+model.load_state_dict(
+    torch.load(
+        "checkpoints/video_encoder_final.pt",
+        map_location=device
+    )
+)
+
 model.eval()
 
 # -----------------------------
