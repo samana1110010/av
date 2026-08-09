@@ -1,10 +1,17 @@
-# Python-generated files
+.venv/
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.pyc
 
-# Virtual environments
-.venv
+# Large/generated data
+data/unseen_test/raw/
+data/unseen_test/frames/
+data/unseen_test/audio/
+*.mp4
+*.wav
+*.jpg
+
+# Generated ML artifacts
+embeddings/
+
+# Model checkpoints — handle separately with Git LFS
+checkpoints/

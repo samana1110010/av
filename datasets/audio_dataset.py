@@ -44,4 +44,4 @@ class AudioDataset(Dataset):
 
         mel = self.mel_transform(waveform)
 
-        return mel, label
+        return mel, torch.tensor(label, dtype=torch.long)

@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import torchvision.models as models
+from torchvision.models import resnet50, ResNet50_Weights
 
 
 class VideoEncoder(nn.Module):
@@ -10,11 +10,11 @@ class VideoEncoder(nn.Module):
         super().__init__()
 
         # --------------------------
-        # Pretrained ResNet18
+        # Pretrained ResNet50
         # --------------------------
 
-        backbone = models.resnet18(
-            weights=models.ResNet18_Weights.IMAGENET1K_V1
+        backbone = resnet50(
+            weights=ResNet50_Weights.IMAGENET1K_V2
         )
 
         # Remove classifier
@@ -22,60 +22,52 @@ class VideoEncoder(nn.Module):
             *list(backbone.children())[:-1]
         )
 
+        # Freeze backbone (recommended for only 500 samples)
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+
         # --------------------------
         # Projection Head
         # --------------------------
 
         self.projector = nn.Sequential(
-
-            nn.Linear(512, 256),
-
+            nn.Linear(2048, 256),
             nn.ReLU(),
-
             nn.Dropout(0.3),
-
             nn.Linear(256, embedding_dim)
-
         )
 
     def forward(self, frames):
 
         """
-        Input
+        Input:
+            (B, 8, 3, 224, 224)
 
-        (B,8,3,224,224)
-
-        Output
-
-        (B,128)
+        Output:
+            (B, 128)
         """
 
         B, T, C, H, W = frames.shape
 
         # Merge batch and time
-
         frames = frames.view(B * T, C, H, W)
 
-        # ResNet18
-
+        # Extract frame features
         features = self.backbone(frames)
 
-        # (B*T,512,1,1)
-
+        # (B*T, 2048, 1, 1)
         features = features.squeeze(-1).squeeze(-1)
 
-        # (B*T,512)
+        # (B*T, 2048)
+        features = features.view(B, T, 2048)
 
-        features = features.view(B, T, 512)
-
-        # Average across frames
-
+        # Temporal mean pooling
         video_features = features.mean(dim=1)
 
+        # Projection
         embedding = self.projector(video_features)
 
-        # Normalize
-
+        # L2 Normalize
         embedding = nn.functional.normalize(
             embedding,
             p=2,

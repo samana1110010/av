@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncSense | Cross-Modal Retrieval</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb purple-orb"></div>
+        <div class="orb cyan-orb"></div>
+    </div>
+
+    <div class="app-container glass-panel">
+        <header>
+            <div class="logo">
+                <h1>Sync<span class="neon-cyan">Sense</span></h1>
+                <p>Cross-Modal Audio-Video Retrieval</p>
+            </div>
+            <nav>
+                <a href="#" class="active">Home</a>
+                <a href="#">Upload</a>
+                <a href="#">My Library</a>
+                <a href="#">History</a>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar">SJ</div>
+                <div class="status-dot"></div>
+            </div>
+        </header>
+
+        <main>
+            <section class="upload-section glass-panel">
+                <h2>Upload or Search: Audio/Video Query</h2>
+                <div class="upload-zones">
+                    <div class="upload-box" id="video-upload">
+                        <div class="upload-header">
+                            <span>VIDEO QUERY</span>
+                            <div class="icons">
+                                <span>▶</span>
+                            </div>
+                        </div>
+                        <div class="drop-zone video-zone">
+                            <div class="upload-icon">↑</div>
+                            <p>Drag & Drop Video or<br>Click to Upload (MP4, AVI)</p>
+                            <input type="file" accept="video/*" class="file-input" data-type="video">
+                        </div>
+                    </div>
+
+                    <div class="or-divider">
+                        <hr>
+                        <span>OR</span>
+                        <hr>
+                    </div>
+
+                    <div class="upload-box" id="audio-upload">
+                        <div class="upload-header">
+                            <span>AUDIO QUERY</span>
+                            <div class="icons">
+                                <span>♪</span>
+                            </div>
+                        </div>
+                        <div class="drop-zone audio-zone">
+                            <div class="upload-icon">↑</div>
+                            <p>Drag & Drop Audio or<br>Click to Upload (MP3, WAV)</p>
+                            <input type="file" accept="audio/*" class="file-input" data-type="audio">
+                        </div>
+                    </div>
+                </div>
+                <button id="start-btn" class="neon-btn" disabled>Start Retrieval</button>
+            </section>
+
+            <section class="results-section">
+                <h2>Retrieval Results <span id="query-info"></span></h2>
+                <div class="results-grid" id="results-container">
+                    <!-- Results will be injected here via JS -->
+                    <div class="placeholder-text">Upload a query to see results...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="/script.js"></script>
+</body>
+</html>
