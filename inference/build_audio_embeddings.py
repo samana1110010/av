@@ -27,12 +27,13 @@ loader = DataLoader(
 # Model
 # ----------------------------
 
-model = AudioEncoder().to(DEVICE)
+model = AudioEncoder(weights=None).to(DEVICE)
 
 model.load_state_dict(
     torch.load(
         "checkpoints/audio_encoder_final.pt",
-        map_location=DEVICE
+        map_location=DEVICE,
+        weights_only=True,
     )
 )
 

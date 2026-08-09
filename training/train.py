@@ -35,7 +35,8 @@ if torch.cuda.is_available():
 
 dataset = MultimodalDataset(
     csv_file="data/train.csv",
-    audio_dir="data/audio"
+    audio_dir="data/audio",
+    augment=True,
 )
 
 print(f"Samples: {len(dataset)}")

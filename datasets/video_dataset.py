@@ -9,32 +9,27 @@ from torchvision import transforms
 
 class VideoDataset(Dataset):
 
-    def __init__(self, csv_file):
+    def __init__(self, csv_file, augment=False):
 
         self.df = pd.read_csv(csv_file)
 
+        spatial_transforms = [
+            transforms.Resize((256, 256)),
+            transforms.RandomCrop((224, 224)) if augment else transforms.CenterCrop((224, 224)),
+        ]
+        if augment:
+            spatial_transforms.extend([
+                transforms.RandomHorizontalFlip(),
+                transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+            ])
         self.transform = transforms.Compose([
-
-             transforms.Resize((256,256)),
-
-             transforms.RandomCrop((224,224)),
-
-             transforms.RandomHorizontalFlip(),
-
-             transforms.ColorJitter(
-                 brightness=0.2,
-                 contrast=0.2,
-                 saturation=0.2
-             ),
-
-    transforms.ToTensor(),
-
-    transforms.Normalize(
-        mean=[0.485,0.456,0.406],
-        std=[0.229,0.224,0.225]
-    )
-
-])
+            *spatial_transforms,
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225],
+            ),
+        ])
 
     def __len__(self):
         return len(self.df)

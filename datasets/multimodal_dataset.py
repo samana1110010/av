@@ -13,28 +13,31 @@ from datasets.audio_io import load_audio
 
 class MultimodalDataset(Dataset):
 
-    def __init__(self, csv_file, audio_dir):
+    def __init__(self, csv_file, audio_dir, augment=False):
 
         self.df = pd.read_csv(csv_file)
         self.audio_dir = Path(audio_dir)
 
-        # Video augmentation
+        video_steps = [
+            transforms.RandomResizedCrop(224, scale=(0.8, 1.0))
+            if augment
+            else transforms.Compose([
+                transforms.Resize((256, 256)),
+                transforms.CenterCrop((224, 224)),
+            ])
+        ]
+        if augment:
+            video_steps.extend([
+                transforms.RandomHorizontalFlip(p=0.5),
+                transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+            ])
         self.video_transform = transforms.Compose([
-            transforms.RandomResizedCrop(
-                224,
-                scale=(0.8, 1.0)
-            ),
-            transforms.RandomHorizontalFlip(p=0.5),
-            transforms.ColorJitter(
-                brightness=0.2,
-                contrast=0.2,
-                saturation=0.2
-            ),
+            *video_steps,
             transforms.ToTensor(),
             transforms.Normalize(
                 mean=[0.485, 0.456, 0.406],
-                std=[0.229, 0.224, 0.225]
-            )
+                std=[0.229, 0.224, 0.225],
+            ),
         ])
 
         self.mel_transform = transforms.Compose([

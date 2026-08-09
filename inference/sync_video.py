@@ -20,12 +20,17 @@ def sync_video(video_path, audio_path, output_path):
     command = [
         "ffmpeg",
         "-y",                     # overwrite output if it exists
+        "-loglevel", "error",
         "-i", str(video_path),    # input video
+        "-stream_loop", "-1",     # repeat short audio to cover the whole video
         "-i", str(audio_path),    # input audio
         "-map", "0:v:0",          # video stream from the original video
         "-map", "1:a:0",          # audio stream from the replacement audio
         "-c:v", "copy",           # don't re-encode video
         "-c:a", "aac",            # encode audio
+        "-af", "silenceremove=start_periods=1:start_duration=0.1:start_threshold=-45dB,loudnorm=I=-16:TP=-1.5:LRA=11",
+        "-ar", "48000",            # browser-compatible AAC sample rate
+        "-b:a", "128k",
         "-shortest",              # stop when shortest stream ends
         str(output_path)
     ]

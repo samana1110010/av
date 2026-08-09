@@ -1,132 +1,187 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const videoZone = document.getElementById('video-upload');
-    const audioZone = document.getElementById('audio-upload');
-    const videoInput = videoZone.querySelector('.file-input');
-    const audioInput = audioZone.querySelector('.file-input');
-    const startBtn = document.getElementById('start-btn');
-    const resultsContainer = document.getElementById('results-container');
-    const queryInfo = document.getElementById('query-info');
+    const state = { file: null, previewTimers: new Set() };
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const selection = document.getElementById('selection');
+    const fileName = document.getElementById('file-name');
+    const fileMeta = document.getElementById('file-meta');
+    const clearFile = document.getElementById('clear-file');
+    const searchButton = document.getElementById('search-button');
+    const results = document.getElementById('results');
+    const resultSummary = document.getElementById('result-summary');
+    const resultTemplate = document.getElementById('result-template');
+    const finalOutput = document.getElementById('final-output');
+    const outputVideo = document.getElementById('output-video');
+    const outputDescription = document.getElementById('output-description');
+    const downloadOutput = document.getElementById('download-output');
+    const candidatesHeading = document.getElementById('candidates-heading');
 
-    let selectedFile = null;
-    let selectedType = null;
-
-    // Helper to handle zone activation
-    function setActiveZone(type) {
-        if (type === 'video') {
-            videoZone.querySelector('.drop-zone').classList.add('active-zone');
-            audioZone.querySelector('.drop-zone').classList.remove('active-zone');
-        } else {
-            audioZone.querySelector('.drop-zone').classList.add('active-zone');
-            videoZone.querySelector('.drop-zone').classList.remove('active-zone');
+    function clearSelection(resetResults = false) {
+        state.file = null;
+        fileInput.value = '';
+        selection.hidden = true;
+        dropZone.hidden = false;
+        searchButton.disabled = true;
+        if (resetResults) {
+            stopPreviews();
+            outputVideo.removeAttribute('src');
+            finalOutput.hidden = true;
+            candidatesHeading.hidden = true;
+            resultSummary.textContent = 'Waiting for your video';
+            results.className = 'results empty-state';
+            results.innerHTML = '<div class="empty-graphic" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><strong>Your finished video will appear here</strong><p>Upload a silent video to find and attach its soundtrack.</p>';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        startBtn.disabled = false;
     }
 
-    // Input change events
-    videoInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            selectedFile = e.target.files[0];
-            selectedType = 'video';
-            setActiveZone('video');
-            videoZone.querySelector('p').innerText = selectedFile.name;
-            audioZone.querySelector('p').innerHTML = "Drag & Drop Audio or<br>Click to Upload (MP3, WAV)";
+    function selectFile(file) {
+        if (!file) return;
+        if (file.type && !file.type.startsWith('video/')) {
+            showError('Please choose a video file.');
+            return;
         }
-    });
+        state.file = file;
+        fileName.textContent = file.name;
+        fileMeta.textContent = `${formatBytes(file.size)} · silent video`;
+        dropZone.hidden = true;
+        selection.hidden = false;
+        searchButton.disabled = false;
+    }
 
-    audioInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            selectedFile = e.target.files[0];
-            selectedType = 'audio';
-            setActiveZone('audio');
-            audioZone.querySelector('p').innerText = selectedFile.name;
-            videoZone.querySelector('p').innerHTML = "Drag & Drop Video or<br>Click to Upload (MP4, AVI)";
-        }
-    });
+    function formatBytes(bytes) {
+        if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
 
-    // Handle retrieval
-    startBtn.addEventListener('click', async () => {
-        if (!selectedType) return;
+    fileInput.addEventListener('change', () => selectFile(fileInput.files[0]));
+    clearFile.addEventListener('click', () => clearSelection(false));
+    document.getElementById('new-video').addEventListener('click', () => clearSelection(true));
 
-        // UI Loading State
-        startBtn.innerHTML = '<span class="spinner"></span> Processing...';
-        startBtn.disabled = true;
-        resultsContainer.innerHTML = '<div class="placeholder-text"><span class="spinner"></span> Running inference...</div>';
-        queryInfo.innerText = '';
+    ['dragenter', 'dragover'].forEach((name) => dropZone.addEventListener(name, (event) => {
+        event.preventDefault();
+        dropZone.classList.add('dragging');
+    }));
+    ['dragleave', 'drop'].forEach((name) => dropZone.addEventListener(name, (event) => {
+        event.preventDefault();
+        dropZone.classList.remove('dragging');
+    }));
+    dropZone.addEventListener('drop', (event) => selectFile(event.dataTransfer.files[0]));
 
-        const formData = new FormData();
-        if (selectedFile) {
-            formData.append('file', selectedFile);
-        }
-        formData.append('type', selectedType);
+    searchButton.addEventListener('click', async () => {
+        if (!state.file) return;
+        setLoading(true);
+        const body = new FormData();
+        body.append('type', 'video');
+        body.append('file', state.file);
 
         try {
-            const response = await fetch('/api/retrieve', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                renderResults(data.query, data.results);
-            } else {
-                resultsContainer.innerHTML = `<div class="placeholder-text" style="color: #ff4444;">Error: ${data.error}</div>`;
+            const response = await fetch('/api/retrieve', { method: 'POST', body });
+            const contentType = response.headers.get('content-type') || '';
+            const payload = contentType.includes('application/json') ? await response.json() : null;
+            if (!response.ok || !payload?.success) {
+                throw new Error(payload?.error || `Server returned HTTP ${response.status}`);
             }
+            if (!payload.output) throw new Error('The server did not create a synchronized video.');
+            renderOutput(payload);
         } catch (error) {
-            resultsContainer.innerHTML = `<div class="placeholder-text" style="color: #ff4444;">Connection error. Backend might be down.</div>`;
+            showError(error.message || 'Could not reach the composition service.');
         } finally {
-            startBtn.innerHTML = 'Start Retrieval';
-            startBtn.disabled = false;
+            setLoading(false);
         }
     });
 
-    function renderResults(query, results) {
-        queryInfo.innerText = `- ${query.title}`;
-        resultsContainer.innerHTML = '';
+    function setLoading(loading) {
+        searchButton.disabled = loading;
+        searchButton.classList.toggle('loading', loading);
+        searchButton.querySelector('span').textContent = loading ? 'Matching + syncing…' : 'Create synced video';
+        if (loading) {
+            finalOutput.hidden = true;
+            candidatesHeading.hidden = true;
+            resultSummary.textContent = 'Finding audio and rendering MP4';
+            results.className = 'results loading-state';
+            results.innerHTML = '<div class="loader"><i></i><i></i><i></i><i></i><i></i></div><strong>Creating your final video</strong><p>Matching the scene, fitting the audio, and encoding the output.</p>';
+        }
+    }
 
-        results.forEach(res => {
-            const card = document.createElement('div');
-            card.className = 'result-card';
-            
-            // Neon color based on type
-            const neonClass = res.type === 'video' ? 'neon-purple' : 'neon-cyan';
-            
-            card.innerHTML = `
-                <div class="card-thumbnail" data-frames='${JSON.stringify(res.frames)}' style="background-image: url('${res.frames[0]}'); background-size: cover; background-position: center; position: relative; cursor: pointer;">
-                    <div class="play-overlay" style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); opacity:0; transition:opacity 0.2s;">
-                        <span style="font-size: 32px; color: white;">▶ Hover to Play</span>
-                    </div>
-                    <div class="match-badge" style="border-color: var(--${neonClass}); color: var(--${neonClass});">
-                        ${res.score}% Match
-                    </div>
-                </div>
-                <div class="card-title">${res.title}</div>
-                <div class="card-type">${res.type} Source</div>
-                <audio controls style="width: 100%; margin-top: 10px; height: 35px; border-radius: 5px;" onplay="this.parentElement.querySelector('.card-thumbnail').dispatchEvent(new Event('mouseenter'))" onpause="this.parentElement.querySelector('.card-thumbnail').dispatchEvent(new Event('mouseleave'))">
-                    <source src="${res.audio_url}" type="audio/wav">
-                </audio>
-            `;
-            
-            // Add hover effect to play video frames
-            const thumbnail = card.querySelector('.card-thumbnail');
-            const overlay = card.querySelector('.play-overlay');
-            let frameInterval;
-            
-            thumbnail.addEventListener('mouseenter', () => {
-                overlay.style.opacity = '1';
-                let currentFrame = 0;
-                frameInterval = setInterval(() => {
-                    currentFrame = (currentFrame + 1) % res.frames.length;
-                    thumbnail.style.backgroundImage = \`url('\${res.frames[currentFrame]}')\`;
-                }, 100); // 10 fps
+    function renderOutput(payload) {
+        outputVideo.src = `${payload.output.url}?v=${Date.now()}`;
+        downloadOutput.href = `${payload.output.download_url}&name=${encodeURIComponent(payload.output.filename)}`;
+        downloadOutput.download = payload.output.filename;
+        outputDescription.textContent = `Matched with “${payload.output.audio.title}” (${payload.output.audio.score.toFixed(1)}% similarity). The audio now runs for the full video duration.`;
+        finalOutput.hidden = false;
+        candidatesHeading.hidden = false;
+        resultSummary.textContent = 'Ready to preview and download';
+        renderCandidates(payload.results);
+        document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderCandidates(items) {
+        stopPreviews();
+        results.className = 'results results-list compact-results';
+        results.innerHTML = '';
+        items.forEach((item, index) => {
+            const card = resultTemplate.content.firstElementChild.cloneNode(true);
+            card.style.setProperty('--delay', `${index * 70}ms`);
+            card.querySelector('.rank').textContent = String(item.rank).padStart(2, '0');
+            card.querySelector('.class-label').textContent = item.rank === 1 ? 'Selected audio' : `Candidate ${item.rank}`;
+            card.querySelector('.score').textContent = `${item.score.toFixed(1)}% similarity`;
+            card.querySelector('h3').textContent = item.title;
+            card.querySelector('.result-id').textContent = item.id;
+            const image = card.querySelector('img');
+            image.src = item.frames[0];
+            image.alt = `${item.title} reference frame`;
+            card.querySelector('.media-kind').textContent = 'audio';
+            card.querySelector('audio').src = item.audio_url;
+            card.querySelector('.open-video').href = item.video_url;
+            let frameIndex = 0;
+            const preview = card.querySelector('.media-preview');
+            preview.addEventListener('mouseenter', () => {
+                const timer = setInterval(() => {
+                    frameIndex = (frameIndex + 1) % item.frames.length;
+                    image.src = item.frames[frameIndex];
+                }, 180);
+                state.previewTimers.add(timer);
+                preview.dataset.timer = String(timer);
             });
-            
-            thumbnail.addEventListener('mouseleave', () => {
-                overlay.style.opacity = '0';
-                clearInterval(frameInterval);
-                thumbnail.style.backgroundImage = \`url('\${res.frames[0]}')\`; // Reset to first frame
+            preview.addEventListener('mouseleave', () => {
+                const timer = Number(preview.dataset.timer);
+                clearInterval(timer);
+                state.previewTimers.delete(timer);
+                frameIndex = 0;
+                image.src = item.frames[0];
             });
-            
-            resultsContainer.appendChild(card);
+            results.appendChild(card);
         });
     }
+
+    function stopPreviews() {
+        state.previewTimers.forEach(clearInterval);
+        state.previewTimers.clear();
+    }
+
+    function showError(message) {
+        finalOutput.hidden = true;
+        candidatesHeading.hidden = true;
+        resultSummary.textContent = 'Request needs attention';
+        results.className = 'results error-state';
+        results.innerHTML = '<span aria-hidden="true">!</span><strong>Unable to create the video</strong><p></p>';
+        results.querySelector('p').textContent = message;
+    }
+
+    async function checkHealth() {
+        const status = document.getElementById('system-status');
+        try {
+            const response = await fetch('/api/health');
+            if (!response.ok) throw new Error();
+            const health = await response.json();
+            status.classList.add('online');
+            status.querySelector('span:last-child').textContent = `Ready · ${health.device.toUpperCase()} · ${health.version}`;
+            document.getElementById('gallery-count').textContent = health.gallery_size;
+        } catch {
+            status.classList.add('offline');
+            status.querySelector('span:last-child').textContent = 'Service unavailable';
+        }
+    }
+
+    checkHealth();
 });

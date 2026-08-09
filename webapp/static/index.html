@@ -1,87 +1,129 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SyncSense | Cross-Modal Retrieval</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Automatically match audio to a silent video and export a synchronized MP4.">
+    <title>SyncSense — Automatic Video Soundtrack</title>
+    <link rel="stylesheet" href="style.css?v=20260809-3">
 </head>
 <body>
-    <div class="background-orbs">
-        <div class="orb purple-orb"></div>
-        <div class="orb cyan-orb"></div>
-    </div>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="SyncSense home">
+            <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+            <span>SyncSense</span>
+        </a>
+        <div class="system-status" id="system-status" aria-live="polite">
+            <span class="status-light"></span>
+            <span>Connecting</span>
+        </div>
+    </header>
 
-    <div class="app-container glass-panel">
-        <header>
-            <div class="logo">
-                <h1>Sync<span class="neon-cyan">Sense</span></h1>
-                <p>Cross-Modal Audio-Video Retrieval</p>
+    <main>
+        <section class="hero">
+            <p class="eyebrow">Automatic audio matching + synchronization</p>
+            <h1>Give every silent<br>scene a <em>sound.</em></h1>
+            <p class="hero-copy">Upload a video without audio. SyncSense finds the best matching sound, fits it to the clip, and returns a finished MP4.</p>
+            <div class="stats" aria-label="System statistics">
+                <div><strong id="gallery-count">500</strong><span>indexed pairs</span></div>
+                <div><strong>128</strong><span>embedding dimensions</span></div>
+                <div><strong>1</strong><span>finished MP4</span></div>
             </div>
-            <nav>
-                <a href="#" class="active">Home</a>
-                <a href="#">Upload</a>
-                <a href="#">My Library</a>
-                <a href="#">History</a>
-            </nav>
-            <div class="user-profile">
-                <div class="avatar">SJ</div>
-                <div class="status-dot"></div>
+        </section>
+
+        <section class="workspace" aria-labelledby="workspace-title">
+            <div class="section-heading">
+                <div>
+                    <p class="step-label">01 / Query</p>
+                    <h2 id="workspace-title">Upload a silent video</h2>
+                </div>
+                <p>One upload. One synced output.</p>
             </div>
-        </header>
 
-        <main>
-            <section class="upload-section glass-panel">
-                <h2>Upload or Search: Audio/Video Query</h2>
-                <div class="upload-zones">
-                    <div class="upload-box" id="video-upload">
-                        <div class="upload-header">
-                            <span>VIDEO QUERY</span>
-                            <div class="icons">
-                                <span>▶</span>
-                            </div>
-                        </div>
-                        <div class="drop-zone video-zone">
-                            <div class="upload-icon">↑</div>
-                            <p>Drag & Drop Video or<br>Click to Upload (MP4, AVI)</p>
-                            <input type="file" accept="video/*" class="file-input" data-type="video">
-                        </div>
-                    </div>
+            <div class="drop-zone" id="drop-zone">
+                <input id="file-input" type="file" accept="video/*" aria-describedby="file-guidance">
+                <div class="drop-visual" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="drop-copy">
+                    <strong id="drop-title">Drop a video here</strong>
+                    <span id="file-guidance">or browse MP4, MOV, AVI, MKV, WEBM · up to 100 MB</span>
+                </div>
+                <button class="browse-button" type="button" tabindex="-1">Browse file</button>
+            </div>
 
-                    <div class="or-divider">
-                        <hr>
-                        <span>OR</span>
-                        <hr>
-                    </div>
+            <div class="selection" id="selection" hidden>
+                <div class="file-icon" id="file-icon">VID</div>
+                <div class="file-details">
+                    <strong id="file-name"></strong>
+                    <span id="file-meta"></span>
+                </div>
+                <button id="clear-file" class="icon-button" type="button" aria-label="Remove selected file">×</button>
+            </div>
 
-                    <div class="upload-box" id="audio-upload">
-                        <div class="upload-header">
-                            <span>AUDIO QUERY</span>
-                            <div class="icons">
-                                <span>♪</span>
-                            </div>
-                        </div>
-                        <div class="drop-zone audio-zone">
-                            <div class="upload-icon">↑</div>
-                            <p>Drag & Drop Audio or<br>Click to Upload (MP3, WAV)</p>
-                            <input type="file" accept="audio/*" class="file-input" data-type="audio">
-                        </div>
+            <div class="action-row">
+                <p id="action-hint">The selected sound is looped or trimmed to match your video duration.</p>
+                <button id="search-button" class="search-button" type="button" disabled>
+                    <span>Create synced video</span><b aria-hidden="true">↗</b>
+                </button>
+            </div>
+        </section>
+
+        <section class="results-section" id="results-section" aria-labelledby="results-title">
+            <div class="section-heading">
+                <div>
+                    <p class="step-label">02 / Results</p>
+                    <h2 id="results-title">Final synced video</h2>
+                </div>
+                <p id="result-summary">Waiting for your video</p>
+            </div>
+            <div class="final-output" id="final-output" hidden>
+                <div class="final-video"><video id="output-video" controls preload="metadata"></video></div>
+                <div class="final-copy">
+                    <span class="complete-badge">Composition ready</span>
+                    <h3>Your video has sound</h3>
+                    <p id="output-description"></p>
+                    <div class="final-actions">
+                        <a id="download-output" class="download-button" download>Download MP4 <span>↓</span></a>
+                        <button id="new-video" class="secondary-button" type="button">Create another</button>
                     </div>
                 </div>
-                <button id="start-btn" class="neon-btn" disabled>Start Retrieval</button>
-            </section>
+            </div>
+            <div class="candidates-heading" id="candidates-heading" hidden>
+                <strong>Audio candidates</strong><span>The top-ranked sound was used in your final video.</span>
+            </div>
+            <div id="results" class="results empty-state" aria-live="polite">
+                <div class="empty-graphic" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+                <strong>Your finished video will appear here</strong>
+                <p>Upload a silent video to find and attach its soundtrack.</p>
+            </div>
+        </section>
+    </main>
 
-            <section class="results-section">
-                <h2>Retrieval Results <span id="query-info"></span></h2>
-                <div class="results-grid" id="results-container">
-                    <!-- Results will be injected here via JS -->
-                    <div class="placeholder-text">Upload a query to see results...</div>
-                </div>
-            </section>
-        </main>
-    </div>
-    
-    <script src="/script.js"></script>
+    <footer>
+        <span>SyncSense / research prototype</span>
+        <span>ResNet encoders · cosine similarity</span>
+    </footer>
+
+    <template id="result-template">
+        <article class="result-card">
+            <div class="rank"></div>
+            <div class="media-preview">
+                <img alt="">
+                <div class="frame-progress" aria-hidden="true"></div>
+                <span class="media-kind"></span>
+            </div>
+            <div class="result-content">
+                <div class="result-topline"><span class="class-label"></span><span class="score"></span></div>
+                <h3></h3>
+                <p class="result-id"></p>
+                <audio controls preload="none"></audio>
+                <a class="open-video" target="_blank" rel="noopener">Open source video <span>↗</span></a>
+            </div>
+        </article>
+    </template>
+
+    <script src="script.js?v=20260809-3"></script>
 </body>
 </html>
